@@ -15,8 +15,32 @@ Start the container:
 	--publish 3493:3493 \
 	--device /dev/bus/usb/xxx/yyy \
 	--env SHUTDOWN_CMD="my-shutdown-command-from-container" \
-	upshift/nut-upsd
+	geoholz/nut-upsd-shoutrrr:0.1.2
 ```
+or via compose file : 
+```
+version: "3.6"
+services:
+  nutups-shoutrrr:
+    container_name: "nutups-shoutrrr"
+    devices:
+      - "/dev/bus/usb/00X/00X:/dev/bus/usb/00X/00X"
+    environment:
+      - "API_PASSWORD=MySecret"
+      - "UPS_NAME=ups"
+      - "UPS_DESC=UPS"
+      - "UPS_DRIVER=usbhid-ups"
+      - "UPS_PORT=auto"
+      - "ADMIN_PASSWORD="
+      - "SHUTDOWN_CMD=echo 'System shutdown not configured!'"
+      - "NOTIFY_URL=gotify://GOTIFY_URL:443/TOKEN/?title=UPS-Alert&priority=1"
+    image: "geoholz/nut-upsd-shoutrrr:0.1.2"
+    ports:v
+      - "3493:3493/tcp"
+    restart: "always"
+```
+
+
 
 ## Auto configuration via environment variables
 
@@ -24,7 +48,7 @@ This image supports customization via environment variables.
 
 ### NOTIFY_URL
 
-Shoutrr URL for alert
+Shoutrr URL for alert, see https://containrrr.dev/shoutrrr/v0.8/services/overview/
 
 ### UPS_NAME
 
