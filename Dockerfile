@@ -1,8 +1,8 @@
-FROM alpine:3.12
+FROM golang:1.22.0-alpine3.19
 
-LABEL maintainer="docker@upshift.fr"
+LABEL maintainer="geoholz"
 
-ENV NUT_VERSION 2.7.4
+ENV NUT_VERSION 2.8.1
 
 ENV UPS_NAME="ups"
 ENV UPS_DESC="UPS"
@@ -27,7 +27,7 @@ RUN set -ex; \
 	; \
 	# download and extract
 	cd /tmp; \
-	wget http://www.networkupstools.org/source/2.7/nut-$NUT_VERSION.tar.gz; \
+	wget http://www.networkupstools.org/source/2.8/nut-$NUT_VERSION.tar.gz; \
 	tar xfz nut-$NUT_VERSION.tar.gz; \
 	cd nut-$NUT_VERSION \
 	; \
@@ -58,7 +58,7 @@ RUN set -ex; \
 	# cleanup
 	rm -rf /tmp/nut-$NUT_VERSION.tar.gz /tmp/nut-$NUT_VERSION; \
 	apk del .build-deps
-
+RUN go install github.com/containrrr/shoutrrr/shoutrrr@latest
 COPY src/docker-entrypoint /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint"]
 

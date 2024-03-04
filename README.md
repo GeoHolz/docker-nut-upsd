@@ -1,6 +1,6 @@
 # Network UPS Tools server
 
-Docker image for Network UPS Tools server.
+Docker image for Network UPS Tools server and Shoutrrr integration for alert
 
 ## Usage
 
@@ -21,6 +21,10 @@ Start the container:
 ## Auto configuration via environment variables
 
 This image supports customization via environment variables.
+
+### NOTIFY_URL
+
+Shoutrr URL for alert
 
 ### UPS_NAME
 

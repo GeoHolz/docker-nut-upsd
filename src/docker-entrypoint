@@ -36,11 +36,24 @@ EOF
 cat >/etc/nut/upsmon.conf <<EOF
 MONITOR $UPS_NAME@localhost 1 monitor $API_PASSWORD master
 SHUTDOWNCMD "$SHUTDOWN_CMD"
+NOTIFYCMD /usr/local/bin/nut-notify.sh
+NOTIFYFLAG ONLINE       SYSLOG+WALL+EXEC
+NOTIFYFLAG ONBATT       SYSLOG+WALL+EXEC
+NOTIFYFLAG LOWBATT      SYSLOG+WALL+EXEC
+NOTIFYFLAG FSD  SYSLOG+WALL+EXEC
+NOTIFYFLAG SHUTDOWN     SYSLOG+WALL+EXEC
+NOTIFYFLAG REPLBATT     SYSLOG+WALL+EXEC
+NOTIFYFLAG NOCOMM       SYSLOG+WALL+EXEC
+NOTIFYFLAG NOPARENT     SYSLOG+WALL+EXEC
 EOF
 
+cat >/usr/local/bin/nut-notify.sh <<EOF
+/go/bin/shoutrrr send --url $NOTIFY_URL --message \$NOTIFYTYPE
+EOF
+chmod +x /usr/local/bin/nut-notify.sh
 chgrp -R nut /etc/nut /dev/bus/usb
 chmod -R o-rwx /etc/nut
-
+/go/bin/shoutrrr send --url $NOTIFY_URL --message "Installation of NUT UPSD SHOUTRRR finished."
 /usr/sbin/upsdrvctl start
 /usr/sbin/upsd
 exec /usr/sbin/upsmon -D
